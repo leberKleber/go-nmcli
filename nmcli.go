@@ -13,7 +13,7 @@ type General interface {
 	Permissions(ctx context.Context) ([]general.Permission, error)
 
 	Hostname(ctx context.Context) (string, error)
-	SetHostname(ctx context.Context, hostname string) error
+	ChangeHostname(ctx context.Context, hostname string) error
 }
 
 type NMCli struct {

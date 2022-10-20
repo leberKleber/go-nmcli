@@ -17,9 +17,9 @@ func (m Manager) Hostname(ctx context.Context) (string, error) {
 	return string(output), nil
 }
 
-// SetHostname sets the persistent system hostname.
+// ChangeHostname change the persistent system hostname.
 // This execution path needs root privileges.
-func (m Manager) SetHostname(ctx context.Context, hostname string) error {
+func (m Manager) ChangeHostname(ctx context.Context, hostname string) error {
 	args := []string{"general", "hostname", hostname}
 
 	err := m.CommandContext(ctx, nmcliCmd, args...).Run()

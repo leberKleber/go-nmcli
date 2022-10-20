@@ -31,7 +31,7 @@ func TestManager_Hostname(t *testing.T) {
 	require.Equal(t, persistedHostname, hostname)
 }
 
-func TestManager_SetHostname(t *testing.T) {
+func TestManager_ChangeHostname(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	m := general.Manager{}
 
@@ -47,6 +47,6 @@ func TestManager_SetHostname(t *testing.T) {
 		return mockedCmd
 	}
 
-	err := m.SetHostname(context.Background(), newHostname)
+	err := m.ChangeHostname(context.Background(), newHostname)
 	require.NoError(t, err)
 }
