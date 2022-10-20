@@ -29,20 +29,20 @@ The library can be used in a `nmcli` like scheme.
 
 ### Device
 
-| original command                  | library path                 | implemented                   |
-|-----------------------------------|------------------------------|-------------------------------|
-| `nmcli device status`             | not implemented yet          | :negative_squared_cross_mark: |
-| `nmcli device show`               | not implemented yet          | :negative_squared_cross_mark: |
-| `nmcli device set`                | not implemented yet          | :negative_squared_cross_mark: |
-| `nmcli device reapply`            | not implemented yet          | :negative_squared_cross_mark: |
-| `nmcli device modify`             | not implemented yet          | :negative_squared_cross_mark: |
-| `nmcli device disconnect`         | not implemented yet          | :negative_squared_cross_mark: |
-| `nmcli device wifi list`          | `NMCli.Device.WiFiList(...)` | :heavy_check_mark:            |
-| `nmcli device wifi connect`       | not implemented yet          | :negative_squared_cross_mark: |
-| `nmcli device wifi hotspot`       | not implemented yet          | :negative_squared_cross_mark: |
-| `nmcli device wifi rescan`        | not implemented yet          | :negative_squared_cross_mark: |
-| `nmcli device wifi show-password` | not implemented yet          | :negative_squared_cross_mark: |
-| `nmcli device wifi lldp`          | not implemented yet          | :negative_squared_cross_mark: |
+| original command                  | library path                         | implemented                   |
+|-----------------------------------|--------------------------------------|-------------------------------|
+| `nmcli device status`             | `NMCli.Device.Status(...)`           | :negative_squared_cross_mark: |
+| `nmcli device show`               | `NMCli.Device.Show(...)`             | :negative_squared_cross_mark: |
+| `nmcli device set`                | `NMCli.Device.Set(...)`              | :negative_squared_cross_mark: |
+| `nmcli device reapply`            | `NMCli.Device.Reapply(...)`          | :negative_squared_cross_mark: |
+| `nmcli device modify`             | `NMCli.Device.Modify(...)`           | :negative_squared_cross_mark: |
+| `nmcli device disconnect`         | `NMCli.Device.Disconnect(...)`       | :negative_squared_cross_mark: |
+| `nmcli device wifi list`          | `NMCli.Device.WiFiList(...)`         | :heavy_check_mark:            |
+| `nmcli device wifi connect`       | `NMCli.Device.WiFiConnect(...)`      | :heavy_check_mark:            |
+| `nmcli device wifi hotspot`       | `NMCli.Device.WiFiHotspot(...)`      | :negative_squared_cross_mark: |
+| `nmcli device wifi rescan`        | `NMCli.Device.WiFiRescan(...)`       | :negative_squared_cross_mark: |
+| `nmcli device wifi show-password` | `NMCli.Device.WiFiShowPassword(...)` | :negative_squared_cross_mark: |
+| `nmcli device wifi lldp`          | `NMCli.Device.WiFiLLDP(...)`         | :negative_squared_cross_mark: |
 
 ### Agent
 

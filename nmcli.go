@@ -2,6 +2,7 @@ package go_nmcli
 
 import (
 	"context"
+	"github.com/leberKleber/go-nmcli/device"
 	"os/exec"
 
 	"github.com/leberKleber/go-nmcli/general"
@@ -10,10 +11,13 @@ import (
 )
 
 type General interface {
+	Hostname(ctx context.Context, args general.HostnameArgs) (string, error)
 	Permissions(ctx context.Context) ([]general.Permission, error)
+}
 
-	Hostname(ctx context.Context) (string, error)
-	ChangeHostname(ctx context.Context, hostname string) error
+type Device interface {
+	WiFiList(ctx context.Context, args device.WiFiListOptions) ([]device.WiFi, error)
+	WiFiConnect(ctx context.Context, BSSID string, args device.WiFiConnectOptions) (string, error)
 }
 
 type NMCli struct {
@@ -21,6 +25,7 @@ type NMCli struct {
 	CommandContext func(ctx context.Context, name string, args ...string) utils.Cmd
 	logDebug       func(fmt string, args ...interface{})
 	General        General
+	Device         Device
 }
 
 type Option = func(cli *NMCli)
@@ -37,6 +42,7 @@ func NewNMCli(opts ...Option) NMCli {
 	}
 
 	cli.General = general.Manager{CommandContext: cli.CommandContext}
+	cli.Device = device.Manager{CommandContext: cli.CommandContext}
 
 	return cli
 }

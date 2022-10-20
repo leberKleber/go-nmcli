@@ -48,3 +48,31 @@ AP[2]:FRITZ!Box 7530 NT:465249545A21426F782037353330204E54:3C\:37\:12\:79\:85\:1
 		},
 	}, wifis)
 }
+
+func TestManager_WiFiConnect(t *testing.T) {
+	ctrl := gomock.NewController(t)
+
+	connectBSSID := "a-random-ssid-or-connectBSSID"
+	connectOptions := device.WiFiConnectOptions{Password: "myFancyPassword"}
+	cmdResponse := "Device 'wlp58s0' successfully activated with 'c24a192f-b626-4a22-b8bc-54b7a026ac3d'."
+
+	mockedCmd := NewMockCmd(ctrl)
+	mockedCmd.EXPECT().Output().Return([]byte(cmdResponse), nil).Times(1)
+
+	m := device.Manager{
+		CommandContext: func(ctx context.Context, name string, args ...string) utils.Cmd {
+			require.Equal(t, "nmcli", name)
+			require.EqualValues(t,
+				[]string{"device", "wifi", "connect", connectBSSID, "password", connectOptions.Password},
+				args,
+			)
+
+			return mockedCmd
+		},
+	}
+
+	output, err := m.WiFiConnect(context.Background(), connectBSSID, connectOptions)
+
+	require.NoError(t, err)
+	require.EqualValues(t, cmdResponse, output)
+}

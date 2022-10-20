@@ -97,6 +97,61 @@ func (m Manager) WiFiList(ctx context.Context, args WiFiListOptions) ([]WiFi, er
 	return wifis, nil
 }
 
+type WiFiConnectOptions struct {
+	Password   string
+	WEPKeyType WiFiConnectOptionsWEPKeyType
+	IfName     string
+	BSSID      string
+	Name       string
+	Private    WiFiConnectOptionsPrivate
+	Hidden     WiFiConnectOptionsHidden
+}
+
+type WiFiConnectOptionsWEPKeyType string
+type WiFiConnectOptionsPrivate string
+type WiFiConnectOptionsHidden string
+
+var (
+	WiFiConnectOptionsWEPKeyTypeKey    WiFiConnectOptionsWEPKeyType = "key"
+	WiFiConnectOptionsWEPKeyTypePhrase WiFiConnectOptionsWEPKeyType = "phrase"
+	WiFiConnectOptionsPrivateYes       WiFiConnectOptionsPrivate    = "yes"
+	WiFiConnectOptionsPrivateNo        WiFiConnectOptionsPrivate    = "no"
+	WiFiConnectOptionsHiddenYes        WiFiConnectOptionsHidden     = "yes"
+	WiFiConnectOptionsHiddenNo         WiFiConnectOptionsHidden     = "no"
+)
+
+func (a WiFiConnectOptions) rawArgs() []string {
+	var args []string
+
+	args = appendWhenNotEmpty(args, a.Password, "password")
+	args = appendWhenNotEmpty(args, string(a.WEPKeyType), "wep-key-type")
+	args = appendWhenNotEmpty(args, a.IfName, "ifname")
+	args = appendWhenNotEmpty(args, a.BSSID, "bssid")
+	args = appendWhenNotEmpty(args, a.Name, "name")
+	args = appendWhenNotEmpty(args, string(a.Private), "private")
+	args = appendWhenNotEmpty(args, string(a.Hidden), "hidden")
+
+	return args
+}
+
+// WiFiConnect Connect to a Wi-Fi network specified by BSSID which could also be a SSID.
+// The command finds a matching connection or creates one and then activates it on a device.
+// This is a command-line counterpart of clicking an SSID in a GUI client.
+// If a connection for the network already exists, it is possible to bring up the existing profile as follows: nmcli con up id <name>.
+// Note that only open, WEP and WPA-PSK networks are supported if no previous connection exists.
+// It is also assumed that IP configuration is obtained via DHCP.
+func (m Manager) WiFiConnect(ctx context.Context, BSSID string, args WiFiConnectOptions) (string, error) {
+	cmdArgs := []string{"device", "wifi", "connect", BSSID}
+	cmdArgs = append(cmdArgs, args.rawArgs()...)
+
+	output, err := m.CommandContext(ctx, nmcliCmd, cmdArgs...).Output()
+	if err != nil {
+		return "", fmt.Errorf("failed to execute nmcli with args %+q: %w", cmdArgs, err)
+	}
+
+	return string(output), nil
+}
+
 func appendWhenNotEmpty(slice []string, toCheck string, preAppend string) []string {
 	if toCheck != "" {
 		slice = append(slice, preAppend, toCheck)
