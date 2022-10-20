@@ -26,7 +26,7 @@ func ParseCmdOutput(output []byte, expectedCountOfFields int) ([][]string, error
 }
 
 func splitBySeparator(separator, line string) []string {
-	escape := `/`
+	escape := `\`
 	tempEscapedSeparator := "\x00"
 
 	replacedEscape := strings.ReplaceAll(line, escape+separator, tempEscapedSeparator)

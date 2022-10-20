@@ -21,7 +21,7 @@ const (
 	PermissionValueNo   PermissionValue = "no"
 )
 
-// Permissions shows caller permissions for authenticated operations.
+// Permissions Show caller permissions for authenticated operations.
 func (m Manager) Permissions(ctx context.Context) ([]Permission, error) {
 	fields := []string{"PERMISSION", "VALUE"}
 	args := []string{"-g", strings.Join(fields, ","), "general", "permissions"}
