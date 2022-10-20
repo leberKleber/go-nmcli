@@ -14,39 +14,23 @@ func TestManager_Hostname(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	m := general.Manager{}
 
-	persistedHostname := "leberKleber-nb"
-	mockedCmd := NewMockCmd(ctrl)
-	mockedCmd.EXPECT().Output().Times(1).Return([]byte(persistedHostname), nil)
+	cmdResponse := "response"
 
-	m.CommandContext = func(ctx context.Context, name string, args ...string) utils.Cmd {
+	mockedCmd := NewMockCmd(ctrl)
+	mockedCmd.EXPECT().Output().Return([]byte(cmdResponse), nil).Times(1)
+
+	ha := general.HostnameArgs{
+		Hostname: "leberKleber-nb",
+	}
+
+	m.CommandContext = func(_ context.Context, name string, args ...string) utils.Cmd {
 		require.Equal(t, "nmcli", name)
-		require.EqualValues(t, []string{"general", "hostname"}, args)
+		require.EqualValues(t, []string{"general", "hostname", ha.Hostname}, args)
 
 		return mockedCmd
 	}
 
-	hostname, err := m.Hostname(context.Background())
+	output, err := m.Hostname(context.Background(), ha)
 	require.NoError(t, err)
-
-	require.Equal(t, persistedHostname, hostname)
-}
-
-func TestManager_ChangeHostname(t *testing.T) {
-	ctrl := gomock.NewController(t)
-	m := general.Manager{}
-
-	mockedCmd := NewMockCmd(ctrl)
-	mockedCmd.EXPECT().Run().Times(1)
-
-	newHostname := "leberKleber-nb"
-
-	m.CommandContext = func(ctx context.Context, name string, args ...string) utils.Cmd {
-		require.Equal(t, "nmcli", name)
-		require.EqualValues(t, []string{"general", "hostname", newHostname}, args)
-
-		return mockedCmd
-	}
-
-	err := m.ChangeHostname(context.Background(), newHostname)
-	require.NoError(t, err)
+	require.Equal(t, cmdResponse, output)
 }
