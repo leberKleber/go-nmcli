@@ -2,11 +2,12 @@ package device_test
 
 import (
 	"context"
+	"testing"
+
 	"github.com/golang/mock/gomock"
 	"github.com/leberKleber/go-nmcli/device"
 	"github.com/leberKleber/go-nmcli/utils"
 	"github.com/stretchr/testify/require"
-	"testing"
 )
 
 func TestManager_WiFiList(t *testing.T) {

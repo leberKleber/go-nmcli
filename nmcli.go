@@ -2,8 +2,9 @@ package go_nmcli
 
 import (
 	"context"
-	"github.com/leberKleber/go-nmcli/device"
 	"os/exec"
+
+	"github.com/leberKleber/go-nmcli/device"
 
 	"github.com/leberKleber/go-nmcli/general"
 	"github.com/leberKleber/go-nmcli/utils"
@@ -18,6 +19,7 @@ type General interface {
 type Device interface {
 	WiFiList(ctx context.Context, args device.WiFiListOptions) ([]device.WiFi, error)
 	WiFiConnect(ctx context.Context, BSSID string, args device.WiFiConnectOptions) (string, error)
+	Status(ctx context.Context) ([]device.Status, error)
 }
 
 type NMCli struct {
