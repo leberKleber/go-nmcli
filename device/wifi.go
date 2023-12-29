@@ -3,8 +3,9 @@ package device
 import (
 	"context"
 	"fmt"
-	"github.com/leberKleber/go-nmcli/utils"
 	"strings"
+
+	"github.com/leberKleber/go-nmcli/utils"
 )
 
 type WiFiListOptions struct {
@@ -15,7 +16,7 @@ type WiFiListOptions struct {
 
 type WiFiListOptionsRescan string
 
-var (
+const (
 	WiFiListOptionsRescanAuto WiFiListOptionsRescan = "auto"
 	WiFiListOptionsRescanYes  WiFiListOptionsRescan = "yes"
 	WiFiListOptionsRescanNo   WiFiListOptionsRescan = "no"
@@ -51,7 +52,7 @@ type WiFi struct {
 	DBusPath  string
 }
 
-// WiFiList List available Wi-Fi access points.
+// WiFiList list available Wi-Fi access points.
 // The IfName and BSSID options can be used to list APs for a particular interface, or with a specific BSSID.
 // The Rescan flag tells whether a new Wi-Fi scan should be triggered.
 func (m Manager) WiFiList(ctx context.Context, args WiFiListOptions) ([]WiFi, error) {
@@ -71,9 +72,9 @@ func (m Manager) WiFiList(ctx context.Context, args WiFiListOptions) ([]WiFi, er
 		return nil, fmt.Errorf("failed to parse nmcli output: %w", err)
 	}
 
-	var wifis []WiFi
-	for _, fields := range parsedOutput {
-		wifis = append(wifis, WiFi{
+	wifis := make([]WiFi, len(parsedOutput))
+	for i, fields := range parsedOutput {
+		wifis[i] = WiFi{
 			Name:      fields[0],
 			SSID:      fields[1],
 			SSIDHEX:   fields[2],
@@ -91,7 +92,7 @@ func (m Manager) WiFiList(ctx context.Context, args WiFiListOptions) ([]WiFi, er
 			Active:    fields[14],
 			InUse:     fields[15],
 			DBusPath:  fields[16],
-		})
+		}
 	}
 
 	return wifis, nil
@@ -107,11 +108,13 @@ type WiFiConnectOptions struct {
 	Hidden     WiFiConnectOptionsHidden
 }
 
-type WiFiConnectOptionsWEPKeyType string
-type WiFiConnectOptionsPrivate string
-type WiFiConnectOptionsHidden string
+type (
+	WiFiConnectOptionsWEPKeyType string
+	WiFiConnectOptionsPrivate    string
+	WiFiConnectOptionsHidden     string
+)
 
-var (
+const (
 	WiFiConnectOptionsWEPKeyTypeKey    WiFiConnectOptionsWEPKeyType = "key"
 	WiFiConnectOptionsWEPKeyTypePhrase WiFiConnectOptionsWEPKeyType = "phrase"
 	WiFiConnectOptionsPrivateYes       WiFiConnectOptionsPrivate    = "yes"
